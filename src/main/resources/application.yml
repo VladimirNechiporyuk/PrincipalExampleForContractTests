@@ -1,0 +1,11 @@
+server:
+  port: 8095
+  servlet:
+    context-path: /example-users
+
+spring:
+  application:
+    name: example-users
+  data:
+    mongodb:
+      database: example-users
