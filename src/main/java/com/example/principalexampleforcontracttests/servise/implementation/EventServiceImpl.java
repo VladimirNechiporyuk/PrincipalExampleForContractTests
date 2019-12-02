@@ -144,6 +144,7 @@ public class EventServiceImpl implements EventService {
         for (ObjectId id : participantsIdsForRemoving) {
             participantsIdsInEvent.remove(id);
         }
+        event.setParticipants(participantsIdsInEvent);
         return event;
     }
 
