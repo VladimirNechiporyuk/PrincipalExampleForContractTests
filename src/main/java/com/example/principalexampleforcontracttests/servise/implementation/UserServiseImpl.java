@@ -44,11 +44,13 @@ public class UserServiseImpl implements UserService {
 
     @Override
     public List<User> fetchAllUsers() {
+        log.debug("Fetching all users");
         return userRepository.findAll();
     }
 
     @Override
     public User fetchUserById(ObjectId id) throws UserNotFoundException {
+        log.debug("Fetching user by id: {}", id);
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
             return userOptional.get();
@@ -59,6 +61,7 @@ public class UserServiseImpl implements UserService {
 
     @Override
     public User fetchUserByName(String name) throws UserNotFoundException {
+        log.debug("Fetching user by name: {}", name);
         Optional<User> userOptional = userRepository.findByName(name);
         if (userOptional.isPresent()) {
             return userOptional.get();
@@ -69,6 +72,7 @@ public class UserServiseImpl implements UserService {
 
     @Override
     public User fetchUserByAge(Integer age) throws UserNotFoundException {
+        log.debug("Fetching user by age: {}", age);
         Optional<User> userOptional = userRepository.findByAge(age);
         if (userOptional.isPresent()) {
             return userOptional.get();
@@ -79,6 +83,7 @@ public class UserServiseImpl implements UserService {
 
     @Override
     public User updateUser(ObjectId id, User user) throws UserNotFoundException {
+        log.debug("Updating user with id: {}, on fields: {}", id, user);
         Optional<User> userOptional = userRepository.findById(id);
         if (!userOptional.isPresent()) {
             throw new UserNotFoundException(String.format("User with id: %s does not exists.", id.toString()));
@@ -89,6 +94,7 @@ public class UserServiseImpl implements UserService {
 
     @Override
     public void deleteUserById(ObjectId id) throws UserNotFoundException {
+        log.debug("Deleting user with id: {}", id);
         Optional<User> userOptional = userRepository.findById(id);
         if (!userOptional.isPresent()) {
             throw new UserNotFoundException("User does not exists.");

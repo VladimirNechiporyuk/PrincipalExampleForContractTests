@@ -28,13 +28,15 @@ public class EventServiceImpl implements EventService {
                              String summary,
                              Set<ObjectId> participants,
                              Date date) {
-        log.debug("Creating event with event type {}, summary {}, participants {}, at date {}", eventType, summary, participants, date);
+        log.debug("Creating event with event type {}, summary {}, participants {}, at date {}",
+                eventType, summary, participants, date);
+
         Event event;
         try {
             event = fetchEventBySummary(summary);
         }
         catch (EventNotFoundException exception) {
-            event = Event.builder()
+                    event = Event.builder()
                     .id(ObjectId.get())
                     .eventType(eventType)
                     .summary(summary)
@@ -48,6 +50,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> fetchAllEvents() {
+        log.debug("Fetching all events");
         return eventRepository.findAll();
     }
 
@@ -127,6 +130,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public List<Event> findAllEventsByParticipant(ObjectId participantId) {
+        log.debug("Fetching all events for participant: {}", participantId);
         List<Event> resultEvents = new ArrayList<>();
         List<Event> eventList = fetchAllEvents();
         for (Event event : eventList) {
@@ -139,6 +143,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event removeParticipantsFromEvent(ObjectId eventId, Set<ObjectId> participantsIdsForRemoving) {
+        log.debug("Removing participants {} from event {}", participantsIdsForRemoving, eventId);
         Event event = fetchEventById(eventId);
         Set<ObjectId> participantsIdsInEvent = event.getParticipants();
         for (ObjectId id : participantsIdsForRemoving) {
