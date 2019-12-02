@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/events")
@@ -49,6 +50,12 @@ public class ExampleEventController {
     public Event updateEvent(@RequestParam("id") ObjectId id,
                              @RequestBody Event event) {
         return eventService.updateEvent(id, event);
+    }
+
+    @PostMapping("/addParticipants")
+    public Event addParticipants(@RequestParam("eventId") ObjectId eventId,
+                                 @RequestBody Set<ObjectId> participantsIds) {
+        return eventService.addParticipants(eventId, participantsIds);
     }
 
     @DeleteMapping

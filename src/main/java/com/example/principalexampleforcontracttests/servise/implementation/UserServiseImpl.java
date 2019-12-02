@@ -2,27 +2,39 @@ package com.example.principalexampleforcontracttests.servise.implementation;
 
 import com.example.principalexampleforcontracttests.entity.User;
 import com.example.principalexampleforcontracttests.exceptions.UserNotFoundException;
-import com.example.principalexampleforcontracttests.repository.ExampleUserRepository;
+import com.example.principalexampleforcontracttests.repository.UserRepository;
 import com.example.principalexampleforcontracttests.servise.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserServiseImpl implements UserService {
 
-    private ExampleUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public UserServiseImpl(ExampleUserRepository userRepository) {
+    public UserServiseImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public User createUser(User user) {
-        return userRepository.save(user);
+        log.debug("Creating user: {}", user);
+        User searchingUser;
+        try {
+            searchingUser = fetchUserById(user.getId());
+        }
+        catch (UserNotFoundException exception) {
+            user.setId(ObjectId.get());
+            return userRepository.save(user);
+        }
+        log.info("User with id {} already exists", user.getId());
+        return searchingUser;
     }
 
     @Override
