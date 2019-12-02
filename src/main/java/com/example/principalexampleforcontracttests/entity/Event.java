@@ -2,7 +2,9 @@ package com.example.principalexampleforcontracttests.entity;
 
 import com.example.principalexampleforcontracttests.enums.EventType;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,6 +16,8 @@ import java.util.Set;
 
 @Data
 @Document(collection = "events")
+@Builder
+@NoArgsConstructor
 public class Event {
 
     @Id

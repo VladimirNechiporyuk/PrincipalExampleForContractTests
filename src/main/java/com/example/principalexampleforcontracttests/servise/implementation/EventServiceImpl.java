@@ -10,9 +10,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -26,17 +24,31 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event createEvent(Event event) {
-        log.debug("Creating event: {}", event);
-        Event searchingEvent;
+    public Event createEvent(EventType eventType,
+                             String summary,
+                             Set<ObjectId> participants,
+                             Date date) {
+        log.debug("Creating event with event type {}, summary {}, participants {}, at date {}", eventType, summary, participants, date);
+        Event event;
         try {
-            searchingEvent = fetchEventById(event.getId());
+            event = fetchEventBySummary(summary);
         }
         catch (EventNotFoundException exception) {
-            event.setId(ObjectId.get());
+            event = Event.builder()
+                    .id(ObjectId.get())
+                    .eventType(eventType)
+                    .summary(summary)
+                    .participants(participants)
+                    .date(date)
+                    .build();
             return eventRepository.save(event);
         }
-        return searchingEvent;
+        return event;
+    }
+
+    @Override
+    public List<Event> fetchAllEvents() {
+        return eventRepository.findAll();
     }
 
     @Override
@@ -111,6 +123,28 @@ public class EventServiceImpl implements EventService {
         if (!eventOptional.isPresent()) {
             throw new EventNotFoundException(String.format("Event with id: %s does not exists", id.toString()));
         }
+    }
+
+    @Override
+    public List<Event> findAllEventsByParticipant(ObjectId participantId) {
+        List<Event> resultEvents = new ArrayList<>();
+        List<Event> eventList = fetchAllEvents();
+        for (Event event : eventList) {
+            if (event.getParticipants().contains(participantId)) {
+                resultEvents.add(event);
+            }
+        }
+        return resultEvents;
+    }
+
+    @Override
+    public Event removeParticipantsFromEvent(ObjectId eventId, Set<ObjectId> participantsIdsForRemoving) {
+        Event event = fetchEventById(eventId);
+        Set<ObjectId> participantsIdsInEvent = event.getParticipants();
+        for (ObjectId id : participantsIdsForRemoving) {
+            participantsIdsInEvent.remove(id);
+        }
+        return event;
     }
 
 }

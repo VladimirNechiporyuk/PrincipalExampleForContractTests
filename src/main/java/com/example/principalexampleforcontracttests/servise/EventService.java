@@ -6,11 +6,17 @@ import com.example.principalexampleforcontracttests.exceptions.EventNotFoundExce
 import org.bson.types.ObjectId;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 public interface EventService {
 
-    Event createEvent(Event event);
+    Event createEvent(EventType eventType,
+                      String summary,
+                      Set<ObjectId> participants,
+                      Date date);
+
+    List<Event> fetchAllEvents();
 
     Event fetchEventById(ObjectId id) throws EventNotFoundException;
 
@@ -25,4 +31,8 @@ public interface EventService {
     Event addParticipants(ObjectId eventId, Set<ObjectId> participantsId);
 
     void deleteEventById(ObjectId id) throws EventNotFoundException;
+
+    List<Event> findAllEventsByParticipant(ObjectId participantId);
+
+    Event removeParticipantsFromEvent(ObjectId eventId, Set<ObjectId> participantsIds);
 }

@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -23,18 +24,27 @@ public class UserServiseImpl implements UserService {
     }
 
     @Override
-    public User createUser(User user) {
-        log.debug("Creating user: {}", user);
-        User searchingUser;
+    public User createUser(String name, Integer age) {
+        log.debug("Creating user with name {} and age {}", name, age);
+        User user;
         try {
-            searchingUser = fetchUserById(user.getId());
+            user = fetchUserByName(name);
         }
         catch (UserNotFoundException exception) {
-            user.setId(ObjectId.get());
+            user = User.builder()
+                    .id(ObjectId.get())
+                    .name(name)
+                    .age(age)
+                    .build();
             return userRepository.save(user);
         }
         log.info("User with id {} already exists", user.getId());
-        return searchingUser;
+        return user;
+    }
+
+    @Override
+    public List<User> fetchAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override

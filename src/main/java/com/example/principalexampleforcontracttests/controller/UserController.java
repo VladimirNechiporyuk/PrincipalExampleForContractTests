@@ -6,6 +6,8 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -18,8 +20,14 @@ public class UserController {
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public User createUser(@RequestParam String name,
+                           @RequestParam Integer age) {
+        return userService.createUser(name, age);
+    }
+
+    @GetMapping("/all")
+    public List<User> findAllUsers() {
+        return userService.fetchAllUsers();
     }
 
     @GetMapping("/{id}")

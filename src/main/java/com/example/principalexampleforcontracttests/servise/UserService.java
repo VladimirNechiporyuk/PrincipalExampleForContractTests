@@ -4,9 +4,13 @@ import com.example.principalexampleforcontracttests.entity.User;
 import com.example.principalexampleforcontracttests.exceptions.UserNotFoundException;
 import org.bson.types.ObjectId;
 
+import java.util.List;
+
 public interface UserService {
 
-    User createUser(User user);
+    User createUser(String name, Integer age);
+
+    List<User> fetchAllUsers();
 
     User fetchUserById(ObjectId id) throws UserNotFoundException;
 
