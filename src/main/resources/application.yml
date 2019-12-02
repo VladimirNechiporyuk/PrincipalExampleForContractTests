@@ -9,7 +9,8 @@ spring:
   data:
     mongodb:
       database: example-users
-  security:
-    user:
-      name: admin
-      password: pass
+security:
+  oauth2:
+    client:
+      client-id: example-users
+      client-secret: example

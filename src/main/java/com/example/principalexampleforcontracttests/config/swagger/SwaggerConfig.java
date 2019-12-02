@@ -1,4 +1,4 @@
-package com.example.principalexampleforcontracttests.config;
+package com.example.principalexampleforcontracttests.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
