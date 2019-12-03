@@ -34,9 +34,8 @@ public class EventServiceImpl implements EventService {
         Event event;
         try {
             event = fetchEventBySummary(summary);
-        }
-        catch (EventNotFoundException exception) {
-                    event = Event.builder()
+        } catch (EventNotFoundException exception) {
+            event = Event.builder()
                     .id(ObjectId.get())
                     .eventType(eventType)
                     .summary(summary)
@@ -51,7 +50,12 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> fetchAllEvents() {
         log.debug("Fetching all events");
-        return eventRepository.findAll();
+        List<Event> events = eventRepository.findAll();
+        if (events.isEmpty()) {
+            throw new EventNotFoundException("No events found");
+        } else {
+            return events;
+        }
     }
 
     @Override
@@ -109,7 +113,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event addParticipants(ObjectId eventId, Set<ObjectId> participantsId) {
+    public Event addParticipants(ObjectId eventId, Set<ObjectId> participantsId) throws EventNotFoundException {
         log.debug("Adding to event: {} participants : {}", eventId, participantsId);
         Optional<Event> eventOptional = eventRepository.findById(eventId);
         if (!eventOptional.isPresent()) {
@@ -129,7 +133,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findAllEventsByParticipant(ObjectId participantId) {
+    public List<Event> findAllEventsByParticipant(ObjectId participantId) throws EventNotFoundException {
         log.debug("Fetching all events for participant: {}", participantId);
         List<Event> resultEvents = new ArrayList<>();
         List<Event> eventList = fetchAllEvents();
@@ -142,7 +146,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event removeParticipantsFromEvent(ObjectId eventId, Set<ObjectId> participantsIdsForRemoving) {
+    public Event removeParticipantsFromEvent(ObjectId eventId, Set<ObjectId> participantsIdsForRemoving) throws EventNotFoundException {
         log.debug("Removing participants {} from event {}", participantsIdsForRemoving, eventId);
         Event event = fetchEventById(eventId);
         Set<ObjectId> participantsIdsInEvent = event.getParticipants();

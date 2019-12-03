@@ -43,9 +43,15 @@ public class UserServiseImpl implements UserService {
     }
 
     @Override
-    public List<User> fetchAllUsers() {
+    public List<User> fetchAllUsers() throws UserNotFoundException {
         log.debug("Fetching all users");
-        return userRepository.findAll();
+        List<User> users = userRepository.findAll();
+        if (users.isEmpty()) {
+            throw new UserNotFoundException("No users found");
+        }
+        else {
+            return users;
+        }
     }
 
     @Override
@@ -85,11 +91,13 @@ public class UserServiseImpl implements UserService {
     public User updateUser(ObjectId id, User user) throws UserNotFoundException {
         log.debug("Updating user with id: {}, on fields: {}", id, user);
         Optional<User> userOptional = userRepository.findById(id);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isPresent()) {
+            user.setId(id);
+            return userRepository.save(user);
+        }
+        else {
             throw new UserNotFoundException(String.format("User with id: %s does not exists.", id.toString()));
         }
-        user.setId(id);
-        return userRepository.save(user);
     }
 
     @Override
