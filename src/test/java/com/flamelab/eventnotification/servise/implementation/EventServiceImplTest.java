@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.junit.Assert.assertNotNull;
+import java.util.List;
+
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {TestConfig.class, MocksForEventService.class}, webEnvironment = SpringBootTest.WebEnvironment.NONE)
@@ -40,46 +42,65 @@ public class EventServiceImplTest {
                 newEvent.getDate());
 
         assertNotNull(resultEvent);
-    }
-
-    @Test
-    public void fetchAllEvents() {
-
-    }
-
-    @Test
-    public void fetchEventById() {
-    }
-
-    @Test
-    public void fetchEventByEventType() {
-    }
-
-    @Test
-    public void fetchEventBySummary() {
-    }
-
-    @Test
-    public void fetchEventByDate() {
-    }
-
-    @Test
-    public void updateEvent() {
+        assertNotEquals(resultEvent.getId(), newEvent.getId());
+        assertEquals(resultEvent.getEventType(), newEvent.getEventType());
+        assertEquals(resultEvent.getSummary(), newEvent.getSummary());
+        assertEquals(resultEvent.getParticipants(), newEvent.getParticipants());
+        assertEquals(resultEvent.getDate(), newEvent.getDate());
     }
 
     @Test
     public void addParticipants() {
+        Event event = eventService.addParticipants(testDataProvider.getEventId(), testDataProvider.getUsersIds());
+        assertEquals(event.getParticipants(), testDataProvider.getUsersIds());
     }
 
     @Test
-    public void deleteEventById() {
+    public void fetchAllEvents() {
+        assertEquals(eventService.fetchAllEvents(), testDataProvider.getEventList());
+    }
+
+    @Test
+    public void fetchEventById() {
+        assertEquals(eventService.fetchEventById(testDataProvider.getEventId()), testDataProvider.getEvent());
+    }
+
+    @Test
+    public void fetchEventByEventType() {
+        assertEquals(eventService.fetchEventByEventType(testDataProvider.getEventType()), testDataProvider.getEvent());
+    }
+
+    @Test
+    public void fetchEventBySummary() {
+        assertEquals(eventService.fetchEventBySummary(testDataProvider.getEventSummary()), testDataProvider.getEvent());
+    }
+
+    @Test
+    public void fetchEventByDate() {
+        assertEquals(eventService.fetchEventByDate(testDataProvider.getEventDate()), testDataProvider.getEvent());
     }
 
     @Test
     public void findAllEventsByParticipant() {
+        List<Event> events = eventService.findAllEventsByParticipant(testDataProvider.getUserId());
+
+    }
+
+    @Test
+    public void updateEvent() {
+        Event initialEvent = testDataProvider.getEvent();
+        Event eventWithChanges = testDataProvider.getOtherEvent();
+        eventWithChanges.setId(initialEvent.getId());
+        assertEquals(eventService.updateEvent(initialEvent.getId(), eventWithChanges), eventWithChanges);
+    }
+
+    @Test
+    public void deleteEventById() {
+
     }
 
     @Test
     public void removeParticipantsFromEvent() {
+
     }
 }

@@ -53,6 +53,8 @@ public class MocksForEventService implements MocksForService {
                 .thenReturn(Optional.of(testDataProvider.getEvent()));
     }
 
-
+    private void mockFindAllEventsForParticipantByDate() {
+//        when()
+    }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/users")
@@ -43,6 +44,11 @@ public class UserController {
     @GetMapping("/age")
     public User findUserByAge(@RequestParam("age") Integer age) {
         return userService.fetchUserByAge(age);
+    }
+
+    @GetMapping("/findUsersByIds")
+    public Set<User> findUsersByIds(@RequestParam("usersIds") Set<ObjectId> usersIds) {
+        return userService.fetchUsersByIds(usersIds);
     }
 
     @PutMapping

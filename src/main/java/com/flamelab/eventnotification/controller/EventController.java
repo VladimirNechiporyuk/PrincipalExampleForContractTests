@@ -1,6 +1,7 @@
 package com.flamelab.eventnotification.controller;
 
 import com.flamelab.eventnotification.entity.Event;
+import com.flamelab.eventnotification.entity.User;
 import com.flamelab.eventnotification.enums.EventType;
 import com.flamelab.eventnotification.servise.EventService;
 import org.bson.types.ObjectId;
@@ -61,9 +62,15 @@ public class EventController {
         return eventService.fetchEventByDate(date);
     }
 
-    @GetMapping("/eventsForParticipant")
+    @GetMapping("/allEventsForParticipant")
     public List<Event> findAllEventsForParticipant(ObjectId participantId) {
         return eventService.findAllEventsByParticipant(participantId);
+    }
+
+    @GetMapping("/eventsForParticipantByDate")
+    public List<Event> findAllEventsForParticipantByDate(@RequestParam("date") ObjectId participantId,
+                                                         @RequestParam("date") Date date) {
+        return eventService.findAllEventsForParticipantByDate(participantId, date);
     }
 
     @PutMapping
@@ -74,12 +81,12 @@ public class EventController {
 
     @PutMapping("/removeParticipants")
     public Event removeParticipants(@RequestParam("eventId") ObjectId eventId,
-                                    @RequestParam("participantsIds") Set<ObjectId> participantsIds) {
+                                    @RequestParam("participantsIds") List<ObjectId> participantsIds) {
         return eventService.removeParticipantsFromEvent(eventId, participantsIds);
     }
 
     @DeleteMapping
-    public void deleteEvent(@RequestParam("id") ObjectId id) {
-        eventService.deleteEventById(id);
+    public Boolean deleteEvent(@RequestParam("id") ObjectId id) {
+        return eventService.deleteEventById(id);
     }
 }

@@ -5,6 +5,7 @@ import com.flamelab.eventnotification.exceptions.UserNotFoundException;
 import org.bson.types.ObjectId;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
@@ -17,6 +18,8 @@ public interface UserService {
     User fetchUserByName(String name) throws UserNotFoundException;
 
     User fetchUserByAge(Integer age) throws UserNotFoundException;
+
+    Set<User> fetchUsersByIds(Set<ObjectId> users);
 
     User updateUser(ObjectId id, User user) throws UserNotFoundException;
 

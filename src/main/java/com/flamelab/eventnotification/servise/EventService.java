@@ -13,6 +13,8 @@ public interface EventService {
 
     Event createEvent(EventType eventType, String summary, Set<ObjectId> participants, Date date);
 
+    Event addParticipants(ObjectId eventId, Set<ObjectId> participantsId);
+
     List<Event> fetchAllEvents();
 
     Event fetchEventById(ObjectId eventId) throws EventNotFoundException;
@@ -23,15 +25,13 @@ public interface EventService {
 
     Event fetchEventByDate(Date eventDate) throws EventNotFoundException;
 
-    Event updateEvent(ObjectId eventId, Event event) throws EventNotFoundException;
-
-    Event addParticipants(ObjectId eventId, Set<ObjectId> participantsId);
-
     List<Event> findAllEventsByParticipant(ObjectId participantId);
 
     List<Event> findAllEventsForParticipantByDate(ObjectId participantId, Date date);
 
-    void deleteEventById(ObjectId id) throws EventNotFoundException;
+    Event updateEvent(ObjectId eventId, Event event) throws EventNotFoundException;
 
-    Event removeParticipantsFromEvent(ObjectId eventId, Set<ObjectId> participantsIds);
+    Boolean deleteEventById(ObjectId id) throws EventNotFoundException;
+
+    Event removeParticipantsFromEvent(ObjectId eventId, List<ObjectId> participantsIds);
 }

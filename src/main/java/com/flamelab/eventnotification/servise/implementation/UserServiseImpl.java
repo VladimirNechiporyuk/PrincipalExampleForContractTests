@@ -9,8 +9,10 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -84,6 +86,20 @@ public class UserServiseImpl implements UserService {
             return userOptional.get();
         } else {
             throw new UserNotFoundException(String.format("User with age: %d does not exists.", age));
+        }
+    }
+
+    @Override
+    public Set<User> fetchUsersByIds(Set<ObjectId> usersIds) {
+        log.debug("Fetching users by ids: {}", usersIds);
+        Set<User> resultUsers = new HashSet<>();
+        for (ObjectId userId : usersIds) {
+            resultUsers.add(fetchUserById(userId));
+        }
+        if (resultUsers.isEmpty()) {
+            throw new UserNotFoundException(String.format("There are no founded users from list %s", usersIds));
+        } else {
+            return resultUsers;
         }
     }
 
