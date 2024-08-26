@@ -20,7 +20,7 @@
         <lombok.version>1.18.8</lombok.version>
         <spring-cloud-dependencies.version>Hoxton.RELEASE</spring-cloud-dependencies.version>
         <persistence-api.version>1.0.2</persistence-api.version>
-        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <springfox-swagger2.version>2.10.0</springfox-swagger2.version>
         <spring-security-oauth2.version>2.3.7.RELEASE</spring-security-oauth2.version>
     </properties>
 
